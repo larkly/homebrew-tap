@@ -29,28 +29,28 @@ jobs:
           # Update each sha256 by matching the line with the platform comment-adjacent url
           # Use the url line above each sha256 to identify which block to update
           python3 - "$formula" "$SHA_DARWIN_ARM64" "$SHA_DARWIN_AMD64" "$SHA_LINUX_ARM64" "$SHA_LINUX_AMD64" <<'PYEOF'
-import sys, re
+          import sys, re
 
-formula_path, sha_da, sha_di, sha_la, sha_li = sys.argv[1:]
+          formula_path, sha_da, sha_di, sha_la, sha_li = sys.argv[1:]
 
-with open(formula_path) as f:
-    content = f.read()
+          with open(formula_path) as f:
+              content = f.read()
 
-replacements = {
-    "darwin-arm64": sha_da,
-    "darwin-amd64": sha_di,
-    "linux-arm64": sha_la,
-    "linux-amd64": sha_li,
-}
+          replacements = {
+              "darwin-arm64": sha_da,
+              "darwin-amd64": sha_di,
+              "linux-arm64": sha_la,
+              "linux-amd64": sha_li,
+          }
 
-for platform, sha in replacements.items():
-    # Match sha256 line that follows a url containing the platform string
-    pattern = rf'(url ".*{re.escape(platform)}.*"\n\s+sha256 ")[a-f0-9]+'
-    content = re.sub(pattern, rf'\g<1>{sha}', content)
+          for platform, sha in replacements.items():
+              # Match sha256 line that follows a url containing the platform string
+              pattern = rf'(url ".*{re.escape(platform)}.*"\n\s+sha256 ")[a-f0-9]+'
+              content = re.sub(pattern, rf'\g<1>{sha}', content)
 
-with open(formula_path, "w") as f:
-    f.write(content)
-PYEOF
+          with open(formula_path, "w") as f:
+              f.write(content)
+          PYEOF
 
           cat "$formula"
 
