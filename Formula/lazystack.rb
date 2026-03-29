@@ -1,26 +1,26 @@
 class Lazystack < Formula
   desc "Fast, keyboard-driven TUI for managing OpenStack resources"
   homepage "https://github.com/larkly/lazystack"
-  version "0.5.1"
+  version "0.6.0"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/larkly/lazystack/releases/download/v#{version}/lazystack-darwin-arm64"
-      sha256 "6ac0a4bdef9e19747ef5442b80607e6179fc9844a8bd3c7628024c0447e7b762"
+      sha256 "04adbb3ac591afcd091f4373e095293840b85e4d51f701d6e9877496fa9ef476"
     elsif Hardware::CPU.intel?
       url "https://github.com/larkly/lazystack/releases/download/v#{version}/lazystack-darwin-amd64"
-      sha256 "cd951a3b6c53ebdac7e4eb864a649cddb9297a35ef9eea8248d057d5da70139c"
+      sha256 "9d5751122e17656423a2876f48be0c0e995198dd4adf7ac7d8894171a9bece64"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/larkly/lazystack/releases/download/v#{version}/lazystack-linux-arm64"
-      sha256 "d419c092a8bff89dfeaf98a9d076fe2e4566279eb3788362caf08f4c8901f6e2"
+      sha256 "6e5354629d6cb28647fe888e0d365ae509519455857d098a2f48ead2a09a88c9"
     elsif Hardware::CPU.intel?
       url "https://github.com/larkly/lazystack/releases/download/v#{version}/lazystack-linux-amd64"
-      sha256 "b58f9abd84bac7ebae8a9ce4570016f3650cb111f8f44b44d399161cd08cb5ac"
+      sha256 "ded02d7560a48ed6781d16c004739589aab7dfdb37761529e375528dca22747d"
     end
   end
 
