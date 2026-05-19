@@ -3,6 +3,7 @@ name: Update lazystack formula
 on:
   repository_dispatch:
     types: [update-formula]
+  workflow_dispatch:
 
 permissions:
   contents: write
