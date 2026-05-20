@@ -4,6 +4,22 @@ on:
   repository_dispatch:
     types: [update-formula]
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. v0.9.1)"
+        required: true
+      sha256_darwin_arm64:
+        description: "SHA256 for darwin-arm64 binary"
+        required: true
+      sha256_darwin_amd64:
+        description: "SHA256 for darwin-amd64 binary"
+        required: true
+      sha256_linux_arm64:
+        description: "SHA256 for linux-arm64 binary"
+        required: true
+      sha256_linux_amd64:
+        description: "SHA256 for linux-amd64 binary"
+        required: true
 
 permissions:
   contents: write
@@ -16,12 +32,16 @@ jobs:
 
       - name: Update formula
         env:
-          VERSION: ${{ github.event.client_payload.version }}
-          SHA_DARWIN_ARM64: ${{ github.event.client_payload.sha256_darwin_arm64 }}
-          SHA_DARWIN_AMD64: ${{ github.event.client_payload.sha256_darwin_amd64 }}
-          SHA_LINUX_ARM64: ${{ github.event.client_payload.sha256_linux_arm64 }}
-          SHA_LINUX_AMD64: ${{ github.event.client_payload.sha256_linux_amd64 }}
+          VERSION: ${{ github.event.client_payload.version || inputs.version }}
+          SHA_DARWIN_ARM64: ${{ github.event.client_payload.sha256_darwin_arm64 || inputs.sha256_darwin_arm64 }}
+          SHA_DARWIN_AMD64: ${{ github.event.client_payload.sha256_darwin_amd64 || inputs.sha256_darwin_amd64 }}
+          SHA_LINUX_ARM64: ${{ github.event.client_payload.sha256_linux_arm64 || inputs.sha256_linux_arm64 }}
+          SHA_LINUX_AMD64: ${{ github.event.client_payload.sha256_linux_amd64 || inputs.sha256_linux_amd64 }}
         run: |
+          if [ -z "$VERSION" ]; then
+            echo "::error::VERSION is empty — aborting to avoid pushing a broken formula"
+            exit 1
+          fi
           # Strip leading 'v' from version
           ver="${VERSION#v}"
           formula="Formula/lazystack.rb"
@@ -63,4 +83,4 @@ jobs:
           git commit -m "Update lazystack to ${VERSION#v}"
           git push
         env:
-          VERSION: ${{ github.event.client_payload.version }}
+          VERSION: ${{ github.event.client_payload.version || inputs.version }}
