@@ -80,7 +80,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Formula/lazystack.rb
-          git commit -m "Update lazystack to ${VERSION#v}"
-          git push
+          git diff --cached --quiet && echo "No changes to commit" || {
+            git commit -m "Update lazystack to ${VERSION#v}"
+            git push
+          }
         env:
           VERSION: ${{ github.event.client_payload.version || inputs.version }}
